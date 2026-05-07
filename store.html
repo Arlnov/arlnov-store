@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arlnov Local Store Test</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { background: #0a000c; color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .card { background: #1a0024; padding: 2rem; border-radius: 12px; border: 1px solid #d400ff; text-align: center; width: 300px; box-shadow: 0 10px 30px rgba(212, 0, 255, 0.2); }
+    h2 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+    p { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-bottom: 1.5rem; }
+    .btn { background: linear-gradient(90deg, #d400ff, #ff2dca); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+    .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px #ff2dca; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Premium Video Editing</h2>
+    <p>Harga: Rp 250.000</p>
+    <button class="btn" onclick="tesBeli('Premium Video Editing', 250000)">Test Order Now</button>
+  </div>
+
+  <script>
+    async function tesBeli(nama, harga) {
+      // 1. Minta email pembeli
+      let email = prompt("Masukkan email testing Anda:");
+      if (!email) return;
+
+      // 2. Kirim data ke mesin kasir lokal kamu (Port 3000)
+      try {
+        const response = await fetch('http://127.0.0.1:3000/buat-transaksi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ namaProduk: nama, harga: harga, emailPembeli: email })
+        });
+        
+        const data = await response.json();
+        
+        // 3. Tampilkan jawaban dari server!
+        if(data.success) {
+          alert("PESAN DARI SERVER: " + data.message + "\n\nLihat Terminal VS Code kamu sekarang!");
+        }
+      } catch (err) {
+        alert("Gagal nyambung ke server. Pastikan terminal node server.js masih nyala!");
+      }
+    }
+  </script>
+</body>
+</html>
